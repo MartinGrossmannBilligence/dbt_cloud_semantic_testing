@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: seznam_vc
+    database: TEST
+    schema: TEST
+    tables:
+      - name: FACT_SALES
+      - name: DIM_PRODUCT
+      - name: DIM_REGION
+      - name: DIM_SALESPERSON

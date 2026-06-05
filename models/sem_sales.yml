@@ -1,0 +1,71 @@
+version: 2
+
+semantic_models:
+  - name: sales
+    model: ref('stg_sales')
+    defaults:
+      agg_time_dimension: sale_date
+
+    entities:
+      - name: sale
+        type: primary
+        expr: sale_id
+      - name: salesperson
+        type: foreign
+        expr: salesperson_id
+      - name: product
+        type: foreign
+        expr: product_id
+
+    dimensions:
+      - name: sale_date
+        type: time
+        type_params:
+          time_granularity: day
+      - name: region_code
+        type: categorical
+
+    measures:
+      - name: total_revenue
+        agg: sum
+        expr: amount_eur
+      - name: total_quantity
+        agg: sum
+        expr: quantity
+      - name: number_of_sales
+        agg: count
+        expr: "1"
+
+metrics:
+  - name: total_revenue
+    label: "Total Revenue EUR"
+    type: simple
+    type_params:
+      measure:
+        name: total_revenue
+        fill_nulls_with: 0
+
+  - name: total_quantity
+    label: "Total Quantity Sold"
+    type: simple
+    type_params:
+      measure:
+        name: total_quantity
+        fill_nulls_with: 0
+
+  - name: number_of_sales
+    label: "Number of Sales"
+    type: simple
+    type_params:
+      measure:
+        name: number_of_sales
+        fill_nulls_with: 0
+
+  - name: average_order_value
+    label: "Average Order Value EUR"
+    type: ratio
+    type_params:
+      numerator:
+        name: total_revenue
+      denominator:
+        name: number_of_sales
